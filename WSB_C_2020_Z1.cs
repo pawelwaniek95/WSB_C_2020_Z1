@@ -6,38 +6,72 @@ namespace WSB_C_2020_Z1
     {
         static void Main(string[] args)
         {
-            // Zadanie 3 podzadanie 2
+            // Zadanie 3 podzadanie 3
 
             // Flaga pokazująca, czy liczby są poprawnie pobrane
-            int badFLag = 0;
+            int flagaBledu = 0;
 
-            // Pobranie parametrów od użytkownika
+            // Wysłanie komunikatów do użytkownika
             Console.WriteLine("### Kalkulator ###");
-            Console.Write("Podaj pierwszą liczbę: ");
-            int liczba1 = 0;
+            Console.Write("Podaj pierwszą liczbę : ");
+
+            // Pobranie danych wejściowych od użytkownika i poprawienie ewentualnego błędu w przecinku, gdy użytkownik dał kropkę zamiast przecinka
+            String liczbaDoParsowania = Console.ReadLine();
+            liczbaDoParsowania = liczbaDoParsowania.Replace(".", ",");
+
+            // Zmienna przechowująca pierwszą liczbę
+            float liczba1 = 0;
 
             // Gdy wystąpi bład parsowania, flaga zostanie ustawiona
-            if (!int.TryParse(Console.ReadLine(), out liczba1))
+            if (!float.TryParse(liczbaDoParsowania, out liczba1))
             {
-                badFLag = 1; Console.WriteLine("Błąd parsowania pierwszej liczby");
+                flagaBledu = 1; Console.WriteLine("Błąd parsowania pierwszej liczby");
+
             }
 
-            Console.Write("Podaj drugą liczbę: ");
-            int liczba2 = 0;
-            if (!int.TryParse(Console.ReadLine(), out liczba2)) { badFLag = 1; Console.WriteLine("Błąd parsowania drugiej liczby"); }
+            // Zmienna przechowująca drugą liczbę
+            float liczba2 = 0;
 
-            Console.WriteLine("Jaką operację chcesz wykonać?");
-            Console.WriteLine("1 - dodawanie");
-            Console.WriteLine("2 - odejmowanie");
-            Console.WriteLine("3 - mnożenie");
-            Console.Write("Operacja: ");
+            if (flagaBledu == 0)
+            {
+                Console.Write("Podaj drugą liczbę: ");
 
+                // Ponowne wykorzystanie już utworzonej zmiennej przechowującej dane wejściowe
+                liczbaDoParsowania = Console.ReadLine();
+                liczbaDoParsowania = liczbaDoParsowania.Replace(".", ",");
+
+                if (flagaBledu == 0 && !float.TryParse(liczbaDoParsowania, out liczba2))
+                {
+                    flagaBledu = 1;
+                    Console.WriteLine("Błąd parsowania drugiej liczby");
+                }
+            }
+
+            // Zmienna przechowująca decyzję użytkownika
             int decyzja = 0;
-            if (!int.TryParse(Console.ReadLine(), out decyzja)) { badFLag = 1; Console.WriteLine("Błąd parsowania działania"); }
 
-            int wynik = 0;
+            if (flagaBledu == 0)
+            {
+                Console.WriteLine("Jaką operację chcesz wykonać?");
+                Console.WriteLine("1 - dodawanie");
+                Console.WriteLine("2 - odejmowanie");
+                Console.WriteLine("3 - mnożenie");
+                Console.WriteLine("4 - dzielenie");
+                Console.Write("Operacja: ");
 
-            if (badFLag == 0)
+                if (!int.TryParse(Console.ReadLine(), out decyzja))
+                {
+                    flagaBledu = 1;
+                    Console.WriteLine("Błąd parsowania działania");
+                }
+            }
+
+            // Linia odstępu
+            Console.WriteLine();
+
+            float wynik = 0;
+
+            if (flagaBledu == 0)
             {
                 switch (decyzja)
                 {
@@ -56,12 +90,40 @@ namespace WSB_C_2020_Z1
                         Console.WriteLine(liczba1 + " * " + liczba2 + " = " + wynik);
                         break;
 
+                    case 4: // Dzielenie
+
+                        try
+                        {
+                            // Jako, że zmienne typu float nie wywołują wyjątku dzielenia przez zero to musimy wymusić ręcznie ten wyjątek, by użyć obsługi wyjątków
+                            if (liczba2 == 0)
+                            {
+                                throw new DivideByZeroException();
+                            }
+
+                            wynik = liczba1 / liczba2;
+                            Console.WriteLine(liczba1 + " / " + liczba2 + " = " + wynik);
+                        }
+                        catch (DivideByZeroException e)
+                        {
+                            Console.WriteLine("Pamiętaj [...] nie dziel przez zero!");
+                        }
+                        catch (Exception e)
+                        {
+                            // Gdyby wystąpił inny wyjątek, którego nie uwzględniono
+                            Console.WriteLine("Coś poszło nie tak... Spróbuj jeszcze raz");
+                        }
+                        break;
+
                     default:
                         Console.WriteLine("Nie podano operacji, więc idę spać, Dobranoc!");
                         break;
                 }
 
             }
+
+            Console.WriteLine();
+            Console.WriteLine("Aby zakończyć wciśnij enter");
+            Console.ReadLine();
         }
     }
 }
