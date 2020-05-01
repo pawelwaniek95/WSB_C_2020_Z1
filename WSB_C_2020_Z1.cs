@@ -6,7 +6,7 @@ namespace WSB_C_2020_Z1
     {
         static void Main(string[] args)
         {
-            // Zadanie 3 podpunkt 1
+            // Zadanie 3 podzadanie 2
 
             // Flaga pokazująca, czy liczby są poprawnie pobrane
             int badFLag = 0;
@@ -29,6 +29,7 @@ namespace WSB_C_2020_Z1
             Console.WriteLine("Jaką operację chcesz wykonać?");
             Console.WriteLine("1 - dodawanie");
             Console.WriteLine("2 - odejmowanie");
+            Console.WriteLine("3 - mnożenie");
             Console.Write("Operacja: ");
 
             int decyzja = 0;
@@ -38,15 +39,26 @@ namespace WSB_C_2020_Z1
 
             if (badFLag == 0)
             {
-                if (decyzja == 1)
+                switch (decyzja)
                 {
-                    wynik = liczba1 + liczba2;
-                    Console.WriteLine(liczba1 + " + " + liczba2 + " = " + wynik);
-                }
-                else if (decyzja == 2)
-                {
-                    wynik = liczba1 - liczba2;
-                    Console.WriteLine(liczba1 + " - " + liczba2 + " = " + wynik);
+                    case 1: // Dodawanie
+                        wynik = liczba1 + liczba2;
+                        Console.WriteLine(liczba1 + " + " + liczba2 + " = " + wynik);
+                        break;
+
+                    case 2: // Odejmowanie
+                        wynik = liczba1 - liczba2;
+                        Console.WriteLine(liczba1 + " - " + liczba2 + " = " + wynik);
+                        break;
+
+                    case 3: // Mnożenie
+                        wynik = liczba1 * liczba2;
+                        Console.WriteLine(liczba1 + " * " + liczba2 + " = " + wynik);
+                        break;
+
+                    default:
+                        Console.WriteLine("Nie podano operacji, więc idę spać, Dobranoc!");
+                        break;
                 }
 
             }
