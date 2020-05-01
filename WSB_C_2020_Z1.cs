@@ -1,19 +1,31 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace WSB_C_2020_Z1
 {
     class WSB_C_2020_Z1
     {
+
         static void Main(string[] args)
         {
-            // Zadanie 3 podzadanie 3
-
-            // Flaga pokazująca, czy liczby są poprawnie pobrane
-            int flagaBledu = 0;
+            // Zadanie 5
 
             // Wysłanie komunikatów do użytkownika
             Console.WriteLine("### Kalkulator ###");
-            Console.Write("Podaj pierwszą liczbę : ");
+
+            // Wywołanie klasy kalkulator
+            Kalkulator();
+
+            Console.WriteLine();
+            Console.WriteLine("Aby zakończyć wciśnij enter");
+            Console.ReadLine();
+
+        }
+
+        static float Kalkulator()
+        {
+            Console.Write("Podaj pierwszą liczbę: ");
+            int flagaBledu = 0;
 
             // Pobranie danych wejściowych od użytkownika i poprawienie ewentualnego błędu w przecinku, gdy użytkownik dał kropkę zamiast przecinka
             String liczbaDoParsowania = Console.ReadLine();
@@ -76,54 +88,68 @@ namespace WSB_C_2020_Z1
                 switch (decyzja)
                 {
                     case 1: // Dodawanie
-                        wynik = liczba1 + liczba2;
-                        Console.WriteLine(liczba1 + " + " + liczba2 + " = " + wynik);
+                        Console.WriteLine(liczba1 + " + " + liczba2 + " = " + dodaj(liczba1, liczba2));
                         break;
 
                     case 2: // Odejmowanie
-                        wynik = liczba1 - liczba2;
-                        Console.WriteLine(liczba1 + " - " + liczba2 + " = " + wynik);
+                        Console.WriteLine(liczba1 + " - " + liczba2 + " = " + odejmij(liczba1, liczba2));
                         break;
 
                     case 3: // Mnożenie
-                        wynik = liczba1 * liczba2;
-                        Console.WriteLine(liczba1 + " * " + liczba2 + " = " + wynik);
+                        Console.WriteLine(liczba1 + " * " + liczba2 + " = " + pomnoz(liczba1, liczba2));
                         break;
 
                     case 4: // Dzielenie
-
-                        try
-                        {
-                            // Jako, że zmienne typu float nie wywołują wyjątku dzielenia przez zero to musimy wymusić ręcznie ten wyjątek, by użyć obsługi wyjątków
-                            if (liczba2 == 0)
-                            {
-                                throw new DivideByZeroException();
-                            }
-
-                            wynik = liczba1 / liczba2;
-                            Console.WriteLine(liczba1 + " / " + liczba2 + " = " + wynik);
-                        }
-                        catch (DivideByZeroException e)
-                        {
-                            Console.WriteLine("Pamiętaj [...] nie dziel przez zero!");
-                        }
-                        catch (Exception e)
-                        {
-                            // Gdyby wystąpił inny wyjątek, którego nie uwzględniono
-                            Console.WriteLine("Coś poszło nie tak... Spróbuj jeszcze raz");
-                        }
+                        Console.WriteLine(liczba1 + " / " + liczba2 + " = " + podziel(liczba1, liczba2));
                         break;
 
                     default:
                         Console.WriteLine("Nie podano operacji, więc idę spać, Dobranoc!");
                         break;
                 }
-
             }
-
-            Console.WriteLine();
-            Console.WriteLine("Aby zakończyć wciśnij enter");
-            Console.ReadLine();
+            return wynik;
         }
+
+        static float dodaj(float liczba1, float liczba2)
+        {
+            return liczba1 + liczba2;
+        }
+
+        static float odejmij(float liczba1, float liczba2)
+        {
+            return liczba1 - liczba2;
+        }
+
+        static float pomnoz(float liczba1, float liczba2)
+        {
+            return liczba1 * liczba2;
+        }
+
+        static float podziel(float liczba1, float liczba2)
+        {
+            float wynik = 0;
+            try
+            {
+                // Jako, że zmienne typu float nie wywołują wyjątku dzielenia przez zero to musimy wymusić ręcznie ten wyjątek, by użyć obsługi wyjątków
+                if (liczba2 == 0)
+                {
+                    throw new DivideByZeroException();
+                }
+
+                wynik = liczba1 / liczba2;
+            }
+            catch (DivideByZeroException e)
+            {
+                Console.WriteLine("Pamiętaj [...] nie dziel przez zero!");
+            }
+            catch (Exception e)
+            {
+                // Gdyby wystąpił inny wyjątek, którego nie uwzględniono
+                Console.WriteLine("Coś poszło nie tak... Spróbuj jeszcze raz");
+            }
+            return wynik;
+        }
+
     }
 }
