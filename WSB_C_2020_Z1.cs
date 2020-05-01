@@ -6,120 +6,114 @@ namespace WSB_C_2020_Z1
     {
         static void Main(string[] args)
         {
-            // Zadanie 3 podzadanie 3
+            // Zadanie 4
 
-            // Flaga pokazująca, czy liczby są poprawnie pobrane
-            int flagaBledu = 0;
-
-            // Wysłanie komunikatów do użytkownika
-            Console.WriteLine("### Kalkulator ###");
-            Console.Write("Podaj pierwszą liczbę : ");
-
-            // Pobranie danych wejściowych od użytkownika i poprawienie ewentualnego błędu w przecinku, gdy użytkownik dał kropkę zamiast przecinka
-            String liczbaDoParsowania = Console.ReadLine();
-            liczbaDoParsowania = liczbaDoParsowania.Replace(".", ",");
-
-            // Zmienna przechowująca pierwszą liczbę
-            float liczba1 = 0;
-
-            // Gdy wystąpi bład parsowania, flaga zostanie ustawiona
-            if (!float.TryParse(liczbaDoParsowania, out liczba1))
-            {
-                flagaBledu = 1; Console.WriteLine("Błąd parsowania pierwszej liczby");
-
-            }
-
-            // Zmienna przechowująca drugą liczbę
-            float liczba2 = 0;
-
-            if (flagaBledu == 0)
-            {
-                Console.Write("Podaj drugą liczbę: ");
-
-                // Ponowne wykorzystanie już utworzonej zmiennej przechowującej dane wejściowe
-                liczbaDoParsowania = Console.ReadLine();
-                liczbaDoParsowania = liczbaDoParsowania.Replace(".", ",");
-
-                if (flagaBledu == 0 && !float.TryParse(liczbaDoParsowania, out liczba2))
-                {
-                    flagaBledu = 1;
-                    Console.WriteLine("Błąd parsowania drugiej liczby");
-                }
-            }
-
-            // Zmienna przechowująca decyzję użytkownika
-            int decyzja = 0;
-
-            if (flagaBledu == 0)
-            {
-                Console.WriteLine("Jaką operację chcesz wykonać?");
-                Console.WriteLine("1 - dodawanie");
-                Console.WriteLine("2 - odejmowanie");
-                Console.WriteLine("3 - mnożenie");
-                Console.WriteLine("4 - dzielenie");
-                Console.Write("Operacja: ");
-
-                if (!int.TryParse(Console.ReadLine(), out decyzja))
-                {
-                    flagaBledu = 1;
-                    Console.WriteLine("Błąd parsowania działania");
-                }
-            }
-
-            // Linia odstępu
-            Console.WriteLine();
-
+            // Utworzenie zmiennych potrzebych do działania programu
+            bool flagaKonca = false;
+            bool flagaPoprawnosci = true;
             float wynik = 0;
+            float liczba = 0;
+            string dzialanie = "";
+            string liczbaDoParsowania = "";
 
-            if (flagaBledu == 0)
+            do
             {
-                switch (decyzja)
+                // Wyczyszczenie konsoli
+                Console.Clear();
+                // Wypisanie komunikatów na konsolę
+                Console.WriteLine("### Kalkulator ###");
+                Console.WriteLine("Aktualny wynik: " + wynik);
+                Console.WriteLine();
+
+                // Sprawdzanie, czy użytkownik wpisał poprawny argument
+                do
                 {
-                    case 1: // Dodawanie
-                        wynik = liczba1 + liczba2;
-                        Console.WriteLine(liczba1 + " + " + liczba2 + " = " + wynik);
-                        break;
+                    Console.WriteLine();
+                    Console.Write("Jaką operację chcesz wykonać? (obsługiwane: dodawanie(+), odejmowanie(-), mnożenie(*), dzielenie(/), wyjście(n) ): ");
+                    dzialanie = Console.ReadLine();
+                    dzialanie = dzialanie.ToLower().Trim();
 
-                    case 2: // Odejmowanie
-                        wynik = liczba1 - liczba2;
-                        Console.WriteLine(liczba1 + " - " + liczba2 + " = " + wynik);
-                        break;
+                    // Sprawdzenie, czu znaki są poprawne
+                } while (!(dzialanie.Equals("+") || dzialanie.Equals("-") || dzialanie.Equals("*") || dzialanie.Equals("/") || dzialanie.Equals("n")));
 
-                    case 3: // Mnożenie
-                        wynik = liczba1 * liczba2;
-                        Console.WriteLine(liczba1 + " * " + liczba2 + " = " + wynik);
-                        break;
+                // Jeżeli użytkownik chce wyjść, to nie ma sensu pobierać już liczby
+                if (!dzialanie.Equals("n"))
+                {
+                    do
+                    {
+                        Console.Write("Podaj liczbę: ");
+                        // Pobranie danych wejściowych od użytkownika i poprawienie ewentualnego błędu w przecinku, gdy użytkownik dał kropkę zamiast przecinka
+                        liczbaDoParsowania = Console.ReadLine();
+                        liczbaDoParsowania = liczbaDoParsowania.Replace(".", ",").Trim();
 
-                    case 4: // Dzielenie
-
-                        try
+                        // Dopóki użytkownik nie poda prawidłowej liczby lub "n" dopóty nie przejdzie dalej
+                        if (!liczbaDoParsowania.Equals("n") && !float.TryParse(liczbaDoParsowania, out liczba))
                         {
-                            // Jako, że zmienne typu float nie wywołują wyjątku dzielenia przez zero to musimy wymusić ręcznie ten wyjątek, by użyć obsługi wyjątków
-                            if (liczba2 == 0)
+                            Console.Write("Oczekuję liczby lub znaku \"n\"!. Spróbuj jeszcze raz: ");
+                            flagaPoprawnosci = false;
+                        }
+                        else
+                        {
+                            flagaPoprawnosci = true;
+                        }
+
+                    } while (!flagaPoprawnosci);
+                }
+
+                try
+                {
+                    switch (dzialanie)
+                    {
+                        case "+": // Dodawanie
+                            wynik += liczba;
+                            break;
+
+                        case "-": // Odejmowanie
+                            wynik -= liczba;
+                            break;
+
+                        case "*": // Mnożenie
+                            wynik *= liczba;
+                            break;
+
+                        case "/": // Dzielenie
+                                  // Jako, że zmienne typu float nie wywołują wyjątku dzielenia przez zero to musimy wymusić ręcznie ten wyjątek, by użyć obsługi wyjątków
+                            if (liczba == 0)
                             {
                                 throw new DivideByZeroException();
                             }
 
-                            wynik = liczba1 / liczba2;
-                            Console.WriteLine(liczba1 + " / " + liczba2 + " = " + wynik);
-                        }
-                        catch (DivideByZeroException e)
-                        {
-                            Console.WriteLine("Pamiętaj [...] nie dziel przez zero!");
-                        }
-                        catch (Exception e)
-                        {
-                            // Gdyby wystąpił inny wyjątek, którego nie uwzględniono
-                            Console.WriteLine("Coś poszło nie tak... Spróbuj jeszcze raz");
-                        }
-                        break;
+                            wynik /= liczba;
+                            break;
 
-                    default:
-                        Console.WriteLine("Nie podano operacji, więc idę spać, Dobranoc!");
-                        break;
+                        case "n":
+                            flagaKonca = true;
+                            Console.WriteLine();
+                            Console.WriteLine("Wynik to: " + wynik);
+                            break;
+
+                        default:
+                            Console.WriteLine("Nie podano prawidłowje, obsługiwanej operacji, więc \"n\" - aby wyjść lub spróbuj jeszcze raz ");
+                            break;
+
+                    }
                 }
-
-            }
+                catch (DivideByZeroException e)
+                {
+                    Console.WriteLine("Pamiętaj [...] nie dziel przez zero!");
+                    Console.WriteLine();
+                    Console.WriteLine("Aby kontynuować wciśnij enter");
+                    Console.ReadLine();
+                }
+                catch (Exception e)
+                {
+                    // Gdyby wystąpił inny wyjątek, którego nie uwzględniono
+                    Console.WriteLine("Coś poszło nie tak... Spróbuj jeszcze raz");
+                    Console.WriteLine();
+                    Console.WriteLine("Aby kontynuować wciśnij enter");
+                    Console.ReadLine();
+                }
+            } while (!flagaKonca);
 
             Console.WriteLine();
             Console.WriteLine("Aby zakończyć wciśnij enter");
